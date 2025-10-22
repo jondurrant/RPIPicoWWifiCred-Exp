@@ -78,11 +78,7 @@ void runTimeStats(   ){
 
 char ssid[SSID_LEN];
 char pwd[SSID_LEN];
-uint8_t key[24] = {
-		1,2,3,4,5,6,7,8,
-		1,2,3,4,5,6,7,8,
-		1,2,3,4,5,6,7,8
-};
+
 
 void debugCB(const int logLevel, const char *const logMessage){
 	printf("WOLFSSL DEBUG(%d): %s\n", logLevel, logMessage);
@@ -94,7 +90,7 @@ void wifi_task(void* params){
 	wolfSSL_SetLoggingCb( debugCB);
 	//wolfSSL_Debugging_ON();
 
-	WifiCred::singleton()->setKey(key);
+	WifiCred::singleton()->genKey(WIFI_KEY);
 
 	WifiHelper::init();
 
@@ -105,11 +101,7 @@ void wifi_task(void* params){
 	for (;;){
 		//runTimeStats();
 		if (! WifiHelper::isJoined()){
-			pico_get_unique_board_id_string (buf, 80);
-			printf("Pico ID: %s\n", buf);
-			WifiHelper::getMACAddressStr(buf);
-			printf("MAC %s\n",  buf);
-
+			printf("Trying to join %s\n", WifiCred::singleton()->getSSID());
 			if (WifiCred::singleton()->isAvailable()){
 				WifiHelper::join(
 						WifiCred::singleton()->getSSID(),
@@ -151,7 +143,7 @@ int main() {
 	stdio_init_all();
 
 	sleep_ms(2000);
-	printf("Start\n");
+	printf("Start: %s\n", WIFI_KEY);
 
 	TaskHandle_t mainTask,  wifiTask;
 

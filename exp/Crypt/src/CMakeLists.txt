@@ -23,6 +23,7 @@ target_link_libraries(${NAME}
 target_include_directories(${NAME} PUBLIC
         ${CMAKE_CURRENT_LIST_DIR})
 
+string(RANDOM LENGTH 64 WIFI_KEY)
 
 # enable usb output, disable uart output
 pico_enable_stdio_usb(${NAME} 0)
@@ -31,6 +32,7 @@ target_compile_definitions(${NAME} PRIVATE
     PICO_DEFAULT_UART_RX_PIN=17
     PICO_DEFAULT_UART_TX_PIN=16
 	CYW43_HOST_NAME="DrJonEA"
+	WIFI_KEY="${WIFI_KEY}"
 )
 
 # create map/bin/hex file etc.

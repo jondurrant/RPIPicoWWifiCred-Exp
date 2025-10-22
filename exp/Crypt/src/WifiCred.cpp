@@ -13,6 +13,7 @@ typedef unsigned char byte_workaround;
 #include <wolfssl/wolfcrypt/aes.h>
 #include <wolfssl/wolfcrypt/ecc.h>
 #include <wolfssl/wolfcrypt/random.h>
+#include <wolfssl/wolfcrypt/sha256.h>
 #undef byte
 
 #include "NVSOnboard.h"
@@ -21,6 +22,7 @@ typedef unsigned char byte_workaround;
 #include "json-maker/json-maker.h"
 #include "tiny-json.h"
 #include "pico/rand.h"
+#include "pico/unique_id.h"
 
 WifiCred::WifiCred() {
 }
@@ -164,7 +166,7 @@ void WifiCred::commit(){
 
 
 void WifiCred::setKey(uint8_t *p24Bytes){
-	memcpy(xKey, p24Bytes, 24);
+	memcpy(xKey, p24Bytes, CRED_KEY_LEN);
 	readCred();
 }
 
@@ -176,4 +178,25 @@ void WifiCred::nuke(){
 	nvs->erase_all();
 	nvs->commit();
 	printf("NVS Wipped Clean\n");
+}
+
+
+void WifiCred::genKey(char *str){
+	uint8_t hash[SHA256_DIGEST_SIZE];
+	char buf[2 * PICO_UNIQUE_BOARD_ID_SIZE_BYTES + 1];
+
+	Sha256 sha;
+	wc_InitSha256(&sha);
+
+	// Then update with data
+	wc_Sha256Update(&sha, (const unsigned char *)str, strlen(str));
+
+	pico_get_unique_board_id_string (buf,  (2 * PICO_UNIQUE_BOARD_ID_SIZE_BYTES + 1) );
+	wc_Sha256Update(&sha, (const unsigned char *)buf, strlen(buf));
+
+	// Finalize the hash
+	wc_Sha256Final(&sha, hash);
+
+	memcpy(xKey, hash, CRED_KEY_LEN);
+	readCred();
 }

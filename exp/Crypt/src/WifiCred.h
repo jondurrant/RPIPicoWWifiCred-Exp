@@ -12,6 +12,7 @@
 
 #define CRED_LEN 35
 #define CRED_JSON_LEN 256
+#define CRED_KEY_LEN 24
 
 class WifiCred {
 public:
@@ -33,6 +34,8 @@ public:
 
 	void setKey(uint8_t *p24Bytes);
 
+	void genKey(char *str);
+
 
 private:
 	WifiCred();
@@ -40,7 +43,7 @@ private:
 	static WifiCred * pSelf;
 	char xSSID[CRED_LEN] ="";
 	char xPWD[CRED_LEN] ="";
-	uint8_t xKey[24] ={0};
+	uint8_t xKey[CRED_KEY_LEN] ={0};
 
 };
 
