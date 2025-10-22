@@ -98,12 +98,8 @@ void wifi_task(void* params){
 	for (;;){
 		//runTimeStats();
 		if (! WifiHelper::isJoined()){
-			pico_get_unique_board_id_string (buf, 80);
-			printf("Pico ID: %s\n", buf);
-			WifiHelper::getMACAddressStr(buf);
-			printf("MAC %s\n",  buf);
-
 			if (WifiCred::singleton()->isAvailable()){
+				printf("Trying to join %s\n", WifiCred::singleton()->getSSID());
 				WifiHelper::join(
 						WifiCred::singleton()->getSSID(),
 						WifiCred::singleton()->getPWD()

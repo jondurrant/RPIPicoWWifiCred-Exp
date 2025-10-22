@@ -11,7 +11,7 @@
 
 #include "WifiCred.h"
 
-#define COMMS_TIMEOUT 25000
+#define COMMS_TIMEOUT 25000000
 
 CommsAgent::CommsAgent() {
 	// TODO Auto-generated constructor stub

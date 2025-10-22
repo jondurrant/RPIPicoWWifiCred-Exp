@@ -101,8 +101,9 @@ void wifi_task(void* params){
 	for (;;){
 		//runTimeStats();
 		if (! WifiHelper::isJoined()){
-			printf("Trying to join %s\n", WifiCred::singleton()->getSSID());
+
 			if (WifiCred::singleton()->isAvailable()){
+				printf("Trying to join %s\n", WifiCred::singleton()->getSSID());
 				WifiHelper::join(
 						WifiCred::singleton()->getSSID(),
 						WifiCred::singleton()->getPWD()

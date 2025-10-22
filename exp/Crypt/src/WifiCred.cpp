@@ -181,7 +181,7 @@ void WifiCred::nuke(){
 }
 
 
-void WifiCred::genKey(char *str){
+void WifiCred::genKey(const char *str){
 	uint8_t hash[SHA256_DIGEST_SIZE];
 	char buf[2 * PICO_UNIQUE_BOARD_ID_SIZE_BYTES + 1];
 

@@ -34,7 +34,7 @@ public:
 
 	void setKey(uint8_t *p24Bytes);
 
-	void genKey(char *str);
+	void genKey(const char *str);
 
 
 private:
